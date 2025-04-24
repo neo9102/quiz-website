@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Website</title>
+    <!-- Linking google fonts for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Quiz Configuration Container -->
+    <div class="config-container">
+      <h2 class="config-title">Quizz Game</h2>
+
+      <div class="config-option">
+        <h4 class="option-title">Select Category</h4>
+        <div class="category-options">
+          <button class="category-option">Programming</button>
+          <button class="category-option">Technology</button>
+          <button class="category-option">Sports</button>
+          <button class="category-option">Entertainment</button>
+        </div>
+      </div>
+      <div class="config-option">
+        <h4 class="option-title">No. of Questions</h4>
+        <div class="question-options">
+          <button class="question-option">5</button>
+          <button class="question-option">10</button>
+          <button class="question-option">15</button>
+          <!-- <button class="question-options">25</button> -->
+        </div>
+      </div>
+      <button class="start-quiz-btn">Start Quiz</button>
+    </div>
+
+    <!-- Quiz container -->
+    <div class="quiz-container">
+      <header class="quiz-header">
+        <h2 class="quiz-title">Quiz Website</h2>
+        <div class="quiz-timer">
+          <span class="material-symbols-outlined"> timer </span>
+
+          <p class="timer-duration">15s</p>
+        </div>
+      </header>
+
+      <div class="quiz-content">
+        <h1 class="question-text">
+          In Javascript, how do you create a funtion?
+        </h1>
+        <ul class="answer-options">
+          <li class="answer-option">
+            <p>create funtion myFunction()</p>
+          </li>
+          <li class="answer-option correct">
+            <p>funtion myFunction()</p>
+            <span class="material-symbols-outlined"> check_circle </span>
+          </li>
+          <li class="answer-option incorrect">
+            <p>def funtion myFunction()</p>
+            <span class="material-symbols-outlined"> cancel </span>
+          </li>
+          <li class="answer-option">
+            <p>func funtion myFunction()</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="quiz-footer">
+        <p class="question-status"><b>2</b> of <b>10</b> Questions</p>
+        <button class="next-question-btn">
+          Next
+          <span class="material-symbols-outlined"> arrow_right_alt </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result container -->
+    <div class="result-container">
+      <img src="quiz-over.png" class="result-img" />
+      <h2 class="result-title">Quiz Completed!</h2>
+      <p class="result-message">
+        You answered <b>3</b> out of <b>5</b> questions correctly, Great effort!
+      </p>
+      <button class="try-again-btn">Try Again</button>
+    </div>
+
+    <script src="javascript/questions.js"></script>
+    <script src="javascript/script.js"></script>
+  </body>
+</html>
