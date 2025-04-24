@@ -1,0 +1,167 @@
+// DOM Elements
+const configContainer = document.querySelector('.config-container');
+const quizContainer = document.querySelector('.quiz-container');
+const resultContainer = document.querySelector('.result-container');
+const categoryButtons = document.querySelectorAll('.category-options');
+const questionButtons = document.querySelectorAll('.question-options');
+const startQuizBtn = document.querySelector('.start-quiz-btn');
+const nextQuestionBtn = document.querySelector('.next-question-btn');
+const tryAgainBtn = document.querySelector('.try-again-btn');
+const questionText = document.querySelector('.question-text');
+const answerOptions = document.querySelector('.answer-options');
+const questionStatus = document.querySelector('.question-status');
+const timerDuration = document.querySelector('.timer-duration');
+const resultMessage = document.querySelector('.result-message');
+
+// Quiz state
+let currentCategory = 'programming';
+let totalQuestions = 10;
+let currentQuestionIndex = 0;
+let score = 0;
+let timer;
+let timeLeft = 15;
+
+// Event Listeners
+startQuizBtn.addEventListener('click', startQuiz);
+nextQuestionBtn.addEventListener('click', nextQuestion);
+tryAgainBtn.addEventListener('click', resetQuiz);
+
+// Category selection
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        currentCategory = button.textContent.toLowerCase();
+    });
+});
+
+// Question count selection
+questionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        questionButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        totalQuestions = parseInt(button.textContent);
+    });
+});
+
+// Start quiz
+function startQuiz() {
+    configContainer.style.display = 'none';
+    quizContainer.style.display = 'block';
+    resultContainer.style.display = 'none';
+    
+    // Get questions for selected category
+    const categoryQuestions = questions.find(q => q.category === currentCategory).questions;
+    // Shuffle and select questions
+    const selectedQuestions = shuffleArray(categoryQuestions).slice(0, totalQuestions);
+    
+    displayQuestion(selectedQuestions[0]);
+    startTimer();
+}
+
+// Display question
+function displayQuestion(question) {
+    questionText.textContent = question.question;
+    answerOptions.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const li = document.createElement('li');
+        li.className = 'answer-option';
+        li.innerHTML = `<p>${option}</p>`;
+        
+        li.addEventListener('click', () => checkAnswer(index, question.correctAnswer));
+        answerOptions.appendChild(li);
+    });
+    
+    questionStatus.innerHTML = `<b>${currentQuestionIndex + 1}</b> of <b>${totalQuestions}</b> Questions`;
+}
+
+// Check answer
+function checkAnswer(selectedIndex, correctIndex) {
+    const options = document.querySelectorAll('.answer-option');
+    options.forEach((option, index) => {
+        option.classList.remove('correct', 'incorrect');
+        if (index === correctIndex) {
+            option.classList.add('correct');
+        } else if (index === selectedIndex) {
+            option.classList.add('incorrect');
+        }
+        option.style.pointerEvents = 'none';
+    });
+    
+    if (selectedIndex === correctIndex) {
+        score++;
+    }
+    
+    clearInterval(timer);
+    nextQuestionBtn.style.display = 'block';
+}
+
+// Next question
+function nextQuestion() {
+    currentQuestionIndex++;
+    const categoryQuestions = questions.find(q => q.category === currentCategory).questions;
+    
+    if (currentQuestionIndex < totalQuestions) {
+        displayQuestion(categoryQuestions[currentQuestionIndex]);
+        resetTimer();
+        nextQuestionBtn.style.display = 'none';
+    } else {
+        showResults();
+    }
+}
+
+// Show results
+function showResults() {
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+    resultMessage.innerHTML = `You answered <b>${score}</b> out of <b>${totalQuestions}</b> questions correctly, ${getResultMessage()}!`;
+}
+
+// Get result message
+function getResultMessage() {
+    const percentage = (score / totalQuestions) * 100;
+    if (percentage >= 80) return 'Excellent';
+    if (percentage >= 60) return 'Good';
+    if (percentage >= 40) return 'Fair';
+    return 'Keep practicing';
+}
+
+// Timer functions
+function startTimer() {
+    timer = setInterval(() => {
+        timeLeft--;
+        timerDuration.textContent = `${timeLeft}s`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            nextQuestion();
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    timeLeft = 15;
+    timerDuration.textContent = `${timeLeft}s`;
+    startTimer();
+}
+
+// Reset quiz
+function resetQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    timeLeft = 15;
+    configContainer.style.display = 'block';
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'none';
+}
+
+// Utility function to shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
